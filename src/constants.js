@@ -48,3 +48,10 @@ export const expenseCategories = [
   { type: 'Pets', amount: 0, color: expenseColors[9] },
   { type: 'Other', amount: 0, color: expenseColors[10] },
 ];
+
+
+
+export const resetCategories = () => {
+  incomeCategories.forEach((c) => c.amount = 0);
+  expenseCategories.forEach((c) => c.amount = 0);
+};

@@ -8,13 +8,20 @@ import {
   OutlinedInput,
   Paper,
   Select,
+  TextField,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import DatePicker from 'react-date-picker';
+import { useDispatch, useSelector } from 'react-redux';
 import { expenseCategories, incomeCategories } from '../constants';
+import { addTransaction } from '../Store/slice';
 import './Main.css';
+import { v4 as uuidv4 } from 'uuid';
+import NumberFormat from 'react-number-format';
+import Moment from 'react-moment';
+import Transaction from './Transaction';
 
-const Main = () => {
+const Main = ({ balance }) => {
   // data to get from the user
   // 1. type
   // 2. category
@@ -22,10 +29,14 @@ const Main = () => {
   // 4. data
 
   const [type, setType] = useState('Income');
-  const [category, setCategory] = useState('');
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState(null);
   const [date, setDate] = useState(new Date());
   const [categories, setCategories] = useState([]);
+  const [category, setCategory] = useState(categories[0]);
+
+  // using dispatch hook for getting acces to the reducers.
+  const dispatch = useDispatch();
+  const allTransactions = useSelector((state) => state.global.transactions);
 
   useEffect(() => {
     if (type === 'Income') {
@@ -37,7 +48,15 @@ const Main = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log({ type, category, amount, date });
+    const newTransaction = {
+      id: uuidv4(),
+      type,
+      category,
+      amount: parseInt(amount),
+      date,
+    };
+    dispatch(addTransaction(newTransaction));
+    console.log(newTransaction);
   };
 
   return (
@@ -52,7 +71,15 @@ const Main = () => {
 
         <div className='main__balance'>
           <p>
-            Total Balance : <span>$50</span>
+            <h4>Total Balance</h4>
+            <NumberFormat
+              value={balance}
+              className='foo'
+              displayType={'text'}
+              thousandSeparator={true}
+              prefix={'Rs. '}
+              renderText={(value, props) => <div {...props}>{value}</div>}
+            />
           </p>
         </div>
       </div>
@@ -90,11 +117,14 @@ const Main = () => {
                 labelId='demo-simple-select-label'
                 id='demo-simple-select'
                 label='Category'
+                required
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
               >
                 {categories.map((c) => (
-                  <MenuItem key={c} value={c}>{c}</MenuItem>
+                  <MenuItem key={c} value={c}>
+                    {c}
+                  </MenuItem>
                 ))}
               </Select>
             </FormControl>
@@ -102,24 +132,18 @@ const Main = () => {
         </div>
         <div className='main__formRow'>
           <div className='main__formInput'>
-            <FormControl>
-              <InputLabel htmlFor='outlined-adornment-amount'>
-                Amount
-              </InputLabel>
-              <OutlinedInput
-                type="number"
-                id='outlined-adornment-amount'
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                startAdornment={
-                  <InputAdornment position='start'>$</InputAdornment>
-                }
-                label='Amount'
-              />
-            </FormControl>
+            <TextField
+              value={amount}
+              type='number'
+              onChange={(e) => setAmount(e.target.value)}
+              id='outlined-basic'
+              label='Amount in Rs'
+              variant='outlined'
+            />
           </div>
-          <div className='main__formInput'>
-            <DatePicker onChange={setDate} value={date} />{' '}
+          <div className='main__formInput full__flex main__formDate'>
+            <p style={{ paddingRight: '5px' }}>Select a Date :</p>
+            <DatePicker onChange={setDate} value={date} />
           </div>
           <div className='main__formBtn'>
             <Button type='submit' variant='contained'>
@@ -130,6 +154,14 @@ const Main = () => {
       </form>
 
       {/* List of transactions */}
+
+      <h2 className='main__listtitle'>List of all Transactions</h2>
+
+      <div className='main__listTransactions'>
+        {allTransactions.map((t) => (
+          <Transaction t={t} key={t.id} />
+        ))}
+      </div>
     </Paper>
   );
 };
