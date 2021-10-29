@@ -1,0 +1,34 @@
+.mainForm__container {
+  padding: 10px 20px;
+  margin: 10px 30px;
+}
+
+.mainForm {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mainForm__input {
+  margin: 0 10px;
+}
+
+.mainForm__input > input{
+  padding: 14px 16px;
+}
+
+
+.mainForm__submitBtn{
+  padding: 18px 40px;
+  background-color: #28A745;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+
+.mainForm__submitBtn:hover{
+  background-color: #33c956;
+
+}

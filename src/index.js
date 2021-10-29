@@ -1,13 +1,14 @@
 import React from 'react';
-import { render } from 'react-dom';
-import { Provider } from 'react-redux';
+import ReactDOM from 'react-dom';
 import App from './App';
-import './index.css';
-import { store } from './Store/store';
+import reducer, { initialState } from './reducer';
+import { StateProvider } from './StateProvider';
 
-render(
-  <Provider store={store}>
-    <App />
-  </Provider>,
+ReactDOM.render(
+  <>
+    <StateProvider initalState={initialState} reducer={reducer}>
+      <App />
+    </StateProvider>
+  </>,
   document.getElementById('root')
 );

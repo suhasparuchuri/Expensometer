@@ -1,0 +1,6 @@
+// whole state
+  const [type, setType] = useState('Income');
+  const [category, setCategory] = useState('');
+  const [amount, setAmount] = useState(null);
+  const [date, setDate] = useState(new Date());
+  const [categories, setCategories] = useState([]);

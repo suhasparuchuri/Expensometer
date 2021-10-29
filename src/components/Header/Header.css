@@ -1,0 +1,24 @@
+.header {
+  padding: 10px 20px;
+  margin: 10px 30px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.header__logo {
+  flex: 1;
+}
+
+.header__logo > h1{
+  font-family: 'Metal Mania', cursive;
+  font-size: 40px;
+}
+
+.header__balance {
+  margin: 0 20px;
+}
+
+.header__userGreet {
+  margin: 0 20px;
+}

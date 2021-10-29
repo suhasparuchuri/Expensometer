@@ -1,47 +1,58 @@
-import { useSelector } from 'react-redux';
-import Charts from './components/Charts';
-import Main from './components/Main';
-import {
-  useTransactions,
-  getExpenseDataset,
-  getIncomeDataset,
-} from './customHooks';
-import './index.css';
+import { onAuthStateChanged } from '@firebase/auth';
+import { Fab } from '@mui/material';
+import { useEffect } from 'react';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import './App.css';
+import Header from './components/Header/Header';
+import Login from './components/Login/Login';
+import { auth, db } from './firebase';
+import { useStateValue } from './StateProvider';
+import AddIcon from '@mui/icons-material/Add';
+import Form from './components/Form/Form';
+import { collection, doc, onSnapshot, query, where } from '@firebase/firestore';
 
-const App = () => {
-  // gettting all the trasnactions from the global state
-  const allTransactions = useSelector((state) => state.global.transactions);
+function App() {
+  const [{ user }, dispatch] = useStateValue();
 
-  const hook1 = useTransactions('Income', allTransactions);
-  const hook2 = useTransactions('Expense', allTransactions);
+  // query for the transactions of current user.
 
-  // getting all data required for charts.
+  useEffect(() => {
+    onAuthStateChanged(auth, (currUser) => {
+      dispatch({ type: 'SET_USER', payload: currUser });
+    });
+  }, []);
 
-  // console.log({
-  //   incomeDataset,
-  //   totalIncome,,
-  //   totalExpenditure,
-  //   expenseDataset,
-  // });
+  useEffect(() => {
+    const q = query(
+      collection(db, 'transactions'),
+      where('username', '==', `${user?.email}`)
+    );
 
-  // console.log(allTransactions);
+    const unsubscribe = async () => {
+      await onSnapshot(q, (snapshot) => {
+        console.log(snapshot.docs.map((doc) => 'Hello World'));
+      });
+    };
+
+    unsubscribe();
+  }, );
+
+  console.log(user);
 
   return (
     <div className='app'>
-      {/* left side income chart */}
-      <Charts title='Income' total={hook1.total} chartData={hook1.chartData} />
-
-      {/* middle form for adding transactions */}
-      <Main className='app__main' balance={hook1.total - hook2.total}/>
-
-      {/* right side expense chart */}
-      <Charts
-        title='Expense'
-        total={hook2.total}
-        chartData={hook2.chartData}
-      />
+      <ToastContainer />
+      {user ? (
+        <div>
+          <Header />
+          <Form />
+        </div>
+      ) : (
+        <Login />
+      )}
     </div>
   );
-};
+}
 
 export default App;
