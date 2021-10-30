@@ -1,0 +1,38 @@
+.transactions {
+  padding: 10px;
+  width: 100%;
+}
+.transactions__list{
+
+  overflow-y: auto;
+  max-height: 450px;
+}
+
+.transactions > h2{
+  text-align: center;
+  margin: 20px;
+}
+
+.transaction {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin: 10px;
+}
+
+.transaction__left {
+  flex: 1;
+}
+
+.transaction__left > p {
+  font-size: 24px;
+}
+
+.transaction__left > span {
+  font-size: small;
+  color: gray;
+}
+
+.transaction__right{
+  padding: 10px;
+}

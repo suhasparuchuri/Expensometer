@@ -1,18 +1,16 @@
 import { addDoc, collection, Timestamp } from '@firebase/firestore';
 import {
-  Button,
   FormControl,
   InputLabel,
   MenuItem,
   Paper,
   Select,
-  TextField,
+  TextField
 } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 import {
-  incomeCategories,
-  expenseCategories,
+  expenseCategories, incomeCategories
 } from '../../constants/categories';
 import { db } from '../../firebase';
 import { useStateValue } from '../../StateProvider';
@@ -32,6 +30,22 @@ function Form() {
   // { amount: 500, category: 'Salary', type: 'Income', date: '2020-11-16', id: '44c68123-5b86-4cc8-b915-bb9e16cebe6a' }
   const addTransaction = async (e) => {
     e.preventDefault();
+
+    if (category === '') {
+      toast.error('Category cannot be empty.');
+      return;
+    }
+
+    if (!(amount > 0)) {
+      toast.error('Amount cannot be Rs. 0.');
+      return;
+    }
+
+    if (date === null) {
+      toast.error('Please consider adding date.');
+      return;
+    }
+
     const newTransaction = {
       amount: parseInt(amount),
       category,
@@ -41,33 +55,8 @@ function Form() {
       _createdAt: Timestamp.now(),
     };
 
-    await addDoc(collection(db, 'transactions'), newTransaction)
-      .then(() => {
-        toast.success('Transaction succesfully added', {
-          position: 'top-right',
-          autoClose: 5000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      })
-      .catch((err) => {
-        toast.error('Something went wrong', {
-          position: 'top-right',
-          autoClose: 5000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      });
-
-    setAmount(0);
-    setCategory('');
-    setDate(null);
+    const docRef = await addDoc(collection(db, 'transactions'), newTransaction);
+    console.log('Document written with ID: ', docRef.id);
   };
 
   return (
@@ -77,6 +66,7 @@ function Form() {
           <FormControl fullWidth>
             <InputLabel id='demo-simple-select-label'>Type</InputLabel>
             <Select
+              required
               labelId='demo-simple-select-label'
               id='demo-simple-select'
               label='Type'
@@ -93,6 +83,7 @@ function Form() {
           <FormControl fullWidth>
             <InputLabel id='demo-simple-select-label'>Category</InputLabel>
             <Select
+              required
               labelId='demo-simple-select-label'
               id='demo-simple-select'
               label='Category'
@@ -109,6 +100,7 @@ function Form() {
         </div>
         <div className='mainForm__input'>
           <TextField
+            required
             type='number'
             placeholder='Amount in Rs.'
             value={amount}
@@ -117,7 +109,8 @@ function Form() {
         </div>
         <div className='mainForm__input'>
           <input
-            type='datetime-local'
+            required
+            type='date'
             value={date}
             onChange={(e) => setDate(e.target.value)}
           />

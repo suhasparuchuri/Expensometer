@@ -6,7 +6,7 @@ import {
 } from '@firebase/auth';
 import { auth } from '../../firebase';
 import { toast } from 'react-toastify';
-import "./Login.css"
+import './Login.css';
 
 function Login() {
   // local state
