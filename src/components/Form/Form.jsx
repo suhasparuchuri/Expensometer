@@ -57,6 +57,10 @@ function Form() {
 
     const docRef = await addDoc(collection(db, 'transactions'), newTransaction);
     console.log('Document written with ID: ', docRef.id);
+
+
+    setAmount(null)
+    setCategory("")
   };
 
   return (

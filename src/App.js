@@ -11,6 +11,7 @@ import Login from './components/Login/Login';
 import Transactions from './components/Transactions/Transactions';
 import { auth, db } from './firebase';
 import { useStateValue } from './StateProvider';
+import NoDataImg from './assets/3973481.jpg';
 
 function App() {
   const [{ user, transactions }, dispatch] = useStateValue();
@@ -46,10 +47,10 @@ function App() {
         <div className='app__mainContent'>
           <Header />
           <Form />
-          {transactions ? (
+          {transactions?.length >= 1 ? (
             <div className='mainContent__data'>
               <div className='data__left'>
-                <Transactions />
+                <Transactions transactions={transactions} />
               </div>
               <div className='data__right'>
                 <Chart title='Income' />
@@ -57,7 +58,7 @@ function App() {
               </div>
             </div>
           ) : (
-            <h3>No Transactions</h3>
+            <img className='nodata__img' src={NoDataImg} alt='No Data Found' />
           )}
         </div>
       ) : (

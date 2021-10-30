@@ -59,6 +59,7 @@
   border-radius: 10px;
   background-color: #156ee4;
   color: white;
+  cursor: pointer;
 }
 .login__btn,
 .login__input {
@@ -86,6 +87,7 @@
   background-color: #35a420;
   color: white;
   font-size: 18px;
+  cursor: pointer;
 }
 
 @media screen and (max-width: 1189px) {

@@ -1,11 +1,10 @@
 import { Paper } from '@mui/material';
+import React from 'react';
 import { useStateValue } from '../../StateProvider';
 import Transaction from '../Transaction/Transaction';
 import './Transactions.css';
 
-function Transactions() {
-  const [{ transactions }] = useStateValue();
-
+const Transactions = React.memo(({ transactions }) => {
   return (
     <>
       <Paper className='transactions'>
@@ -18,6 +17,6 @@ function Transactions() {
       </Paper>
     </>
   );
-}
+});
 
 export default Transactions;
