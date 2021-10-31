@@ -23,12 +23,20 @@
 
 <section>
   <h4>Done by</h4>
-<ul>
-  <li>P Sai Suhas</li>
-  <li>G Rithish Kumar</li>
-  <li>I Trishal Reddy</li>
-  <li>B V Surya Ashish</li>
-  <li>Abhishek H Patil</li>
-  <li>A Kishore</li>
-</ul>
-  </section>
+  <ul>
+    <li>P Sai Suhas</li>
+    <li>G Rithish Kumar</li>
+    <li>I Trishal Reddy</li>
+    <li>B V Surya Ashish</li>
+    <li>Abhishek H Patil</li>
+    <li>A Kishore</li>
+  </ul>
+</section>
+
+
+<section>
+<p>
+
+  <strong>Note : </strong> Kindly please use this app only on Large Screens.
+</p>
+</section>
