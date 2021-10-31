@@ -3,8 +3,9 @@ import React from 'react';
 import { useStateValue } from '../../StateProvider';
 import Transaction from '../Transaction/Transaction';
 import './Transactions.css';
+import PropTypes from 'prop-types';
 
-const Transactions = React.memo(({ transactions }) => {
+const Transactions = ({ transactions }) => {
   return (
     <>
       <Paper className='transactions'>
@@ -17,6 +18,10 @@ const Transactions = React.memo(({ transactions }) => {
       </Paper>
     </>
   );
-});
+}
+
+Transactions.propTypes = {
+  transactions: PropTypes.array,
+};
 
 export default Transactions;

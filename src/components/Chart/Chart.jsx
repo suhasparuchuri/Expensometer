@@ -3,6 +3,7 @@ import { Doughnut } from "react-chartjs-2"
 import { useStateValue } from "../../StateProvider";
 import useTransactions from "../../useTransactions";
 import "./Chart.css"
+import PropTypes from "prop-types"
 
 function Chart({ title }) {
 
@@ -16,6 +17,10 @@ function Chart({ title }) {
       <Doughnut data={chartData}/>
     </Paper>
   )
+}
+
+Chart.propTypes = {
+  title:PropTypes.string
 }
 
 export default Chart

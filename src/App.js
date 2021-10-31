@@ -42,7 +42,7 @@ function App() {
       }
     );
 
-    return unsubscribe
+    return unsubscribe;
   }, [dispatch, user]);
 
   console.log({ user, transactions });
