@@ -55,7 +55,7 @@ function Form() {
       _createdAt: Timestamp.now(),
     };
 
-    const docRef = await addDoc(collection(db, 'transactions'), newTransaction);
+    const docRef = await addDoc(collection(db, `transactions`), newTransaction);
     console.log('Document written with ID: ', docRef.id);
 
 

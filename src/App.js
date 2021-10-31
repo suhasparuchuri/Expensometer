@@ -26,17 +26,24 @@ function App() {
 
   useEffect(() => {
     const unsubscribe = onSnapshot(
-      query(collection(db, 'transactions'), orderBy('_createdAt', 'desc')),
+      query(collection(db, `transactions`), orderBy('_createdAt', 'desc')),
       (snapshot) => {
-        dispatch({
-          type: 'SET_TRANSACTIONS',
-          payload: snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })),
-        });
+        if (user) {
+          dispatch({
+            type: 'SET_TRANSACTIONS',
+            payload: snapshot.docs
+              .map((doc) => ({
+                id: doc.id,
+                ...doc.data(),
+              }))
+              .filter((t) => t.username === user.email),
+          });
+        }
       }
     );
 
-    return unsubscribe;
-  }, [dispatch]);
+    return unsubscribe
+  }, [dispatch, user]);
 
   console.log({ user, transactions });
 
