@@ -23,7 +23,7 @@ function Form() {
   // whole state
   const [type, setType] = useState('Income');
   const [category, setCategory] = useState('');
-  const [amount, setAmount] = useState(null);
+  const [amount, setAmount] = useState("");
   const [date, setDate] = useState(null);
   const categories = type === 'Income' ? incomeCategories : expenseCategories;
 
@@ -59,7 +59,7 @@ function Form() {
     console.log('Document written with ID: ', docRef.id);
 
 
-    setAmount(null)
+    setAmount("")
     setCategory("")
   };
 

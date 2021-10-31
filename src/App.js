@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
+import NoDataImg from './assets/3973481-removebg.png';
 import Chart from './components/Chart/Chart';
 import Form from './components/Form/Form';
 import Header from './components/Header/Header';
@@ -11,7 +12,6 @@ import Login from './components/Login/Login';
 import Transactions from './components/Transactions/Transactions';
 import { auth, db } from './firebase';
 import { useStateValue } from './StateProvider';
-import NoDataImg from './assets/3973481.jpg';
 
 function App() {
   const [{ user, transactions }, dispatch] = useStateValue();
