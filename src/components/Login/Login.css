@@ -1,12 +1,12 @@
 .login {
   /* border: 1px solid; */
-  height: 100vh;
+  height: 100%;
   display: flex;
   align-items: center;
-  width: 80%;
+  width: 70%;
   margin: 0 auto;
-  justify-content: flex-start;
-  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-around;
 }
 
 .login__left {
@@ -14,25 +14,27 @@
   padding: 20px;
   line-height: 2.6;
   font-family: 'Metal Mania', cursive;
-  min-width: 620px;
+  display: flex;
+  flex-direction: column;
 }
 
 .login__left > p {
-  font-size: 36px;
+  font-size: 30px;
   /* font-weight: 700; */
 }
 
 .login__right {
   /* border: 1px solid; */
   padding: 20px;
-  margin-left: 50px;
   flex: 1;
-  max-width: 600px;
+  min-width: 400px;
+  max-height: fit-content !important;
 }
 
 .login__right > form {
   display: flex;
   flex-direction: column;
+
 }
 
 .login__right > form > h1 {
@@ -73,6 +75,7 @@
 .login__alert {
   padding: 14px 16px;
   margin: 10px;
+  font-size: 12px;
 }
 
 .login__alert > p {
@@ -91,11 +94,50 @@
 }
 
 @media screen and (max-width: 1189px) {
-  .login__left {
-    display: none;
+  
+  .login__right {
+    min-width: 300px;
+  }
+  .login__input,
+  .login__btn,
+  .login__signupbtn {
+    padding: 12px 14px;
+    font-size: 14px;
+  }
+  .login {
+    flex-direction: column;
+    width: 50%;
+    align-items: center;
+    justify-content: center;
+    height:fit-content;
   }
 
-  .login {
-    justify-content: center;
+  .login__alert{
+
   }
+}
+
+@media screen and (max-width: 1007px) {
+  
+  .login__input,
+  .login__btn,
+  .login__signupbtn {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+
+  .login__left > p {
+    font-size: 20px;
+  }
+}
+
+
+@media screen and (max-width: 640px) {
+ .login__left > p{
+   font-size: 15px;
+ }
+
+ .login__right > form > h1 {
+   font-size: 18px;
+ }
 }

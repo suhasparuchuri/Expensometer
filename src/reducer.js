@@ -1,6 +1,7 @@
 export const initialState = {
   user: null,
   transactions: null,
+  windowWidth: window.innerWidth,
 };
 
 const reducer = (state, action) => {
@@ -15,6 +16,13 @@ const reducer = (state, action) => {
     return {
       ...state,
       transactions: action.payload,
+    };
+  }
+
+  if (action.type === 'SET_WIDTH') {
+    return {
+      ...state,
+      windowWidth: action.payload,
     };
   }
 };

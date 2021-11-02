@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 
 const Transactions = ({ transactions }) => {
   return (
-    <>
+    
       <Paper className='transactions'>
         <h2>List of All Transactions</h2>
         <div className='transactions__list'>
@@ -16,7 +16,7 @@ const Transactions = ({ transactions }) => {
           ))}
         </div>
       </Paper>
-    </>
+    
   );
 }
 

@@ -14,7 +14,7 @@ import { auth, db } from './firebase';
 import { useStateValue } from './StateProvider';
 
 function App() {
-  const [{ user, transactions }, dispatch] = useStateValue();
+  const [{ user, transactions, windowWidth }, dispatch] = useStateValue();
 
   // query for the transactions of current user.
 
@@ -22,6 +22,15 @@ function App() {
     onAuthStateChanged(auth, (currUser) => {
       dispatch({ type: 'SET_USER', payload: currUser });
     });
+  }, [dispatch]);
+
+  useEffect(() => {
+    window.addEventListener('resize', () => {
+      dispatch({ type: 'SET_WIDTH', payload: window.innerWidth });
+    });
+    return () => {
+      window.removeEventListener('resize', () => {});
+    };
   }, [dispatch]);
 
   useEffect(() => {
@@ -45,7 +54,7 @@ function App() {
     return unsubscribe;
   }, [dispatch, user]);
 
-  console.log({ user, transactions });
+  console.log({ user, transactions, windowWidth });
 
   return (
     <div className='app'>
