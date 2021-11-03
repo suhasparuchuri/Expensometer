@@ -26,6 +26,8 @@
   max-width: 1500px;
   min-width: 100%;
   
+  align-items: start;
+  justify-items: stretch;
 
 }
 
@@ -49,10 +51,11 @@
   /* new --- styling */
   display: grid;
   grid-auto-flow: column;
-  margin: auto;
+  margin: 0 auto;
   gap: 10px;
   overflow-y: auto;
   max-height:  calc(100vh - 178px);
+  align-items: start;
  
 }
 
@@ -68,13 +71,24 @@
     grid-auto-flow: row;
     gap: 0;
     margin: auto;
-    width: 100%;
+    /* width: 100%; */
     grid-template-columns: 100%;
-    grid-auto-flow: row
+    grid-auto-flow: row;
+    align-items: stretch;
   }
 
   .mainContent__data{
     width: 80%;
-    margin: auto;
+    margin:0 auto;
+  }
+}
+
+@media screen and (max-width: 685px) {
+  .mainContent__data{
+    grid-template-columns: 100%;
+  }
+
+  .data__right{
+    overflow-y: none;
   }
 }

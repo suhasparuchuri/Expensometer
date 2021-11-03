@@ -4,6 +4,8 @@
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  overflow-y: scroll;
+  min-height: 80px;
 }
 
 .header__logo {

@@ -1,6 +1,7 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import { onAuthStateChanged } from '@firebase/auth';
 import { collection, onSnapshot, orderBy, query } from '@firebase/firestore';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
@@ -12,6 +13,10 @@ import Login from './components/Login/Login';
 import Transactions from './components/Transactions/Transactions';
 import { auth, db } from './firebase';
 import { useStateValue } from './StateProvider';
+import {
+  PushToTalkButton,
+  PushToTalkButtonContainer,
+} from '@speechly/react-ui';
 
 function App() {
   const [{ user, transactions, windowWidth }, dispatch] = useStateValue();
@@ -35,19 +40,17 @@ function App() {
 
   useEffect(() => {
     const unsubscribe = onSnapshot(
-      query(collection(db, `transactions`), orderBy('_createdAt', 'desc')),
+      query(collection(db, 'transactions'), orderBy('_createdAt', 'desc')),
       (snapshot) => {
-        if (user) {
-          dispatch({
-            type: 'SET_TRANSACTIONS',
-            payload: snapshot.docs
-              .map((doc) => ({
-                id: doc.id,
-                ...doc.data(),
-              }))
-              .filter((t) => t.username === user.email),
-          });
-        }
+        dispatch({
+          type: 'SET_TRANSACTIONS',
+          payload: snapshot.docs
+            .map((doc) => ({
+              id: doc.id,
+              ...doc.data(),
+            }))
+            .filter((t) => t.username === user.email),
+        });
       }
     );
 
@@ -58,6 +61,14 @@ function App() {
 
   return (
     <div className='app'>
+      {user && (
+        <div className='mic__container'>
+          <PushToTalkButtonContainer>
+            <PushToTalkButton placement='top' size='50px' />
+          </PushToTalkButtonContainer>
+        </div>
+      )}
+
       <ToastContainer />
       {user ? (
         <div className='app__mainContent'>

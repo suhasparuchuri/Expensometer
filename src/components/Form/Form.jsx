@@ -1,3 +1,5 @@
+/* eslint-disable react/react-in-jsx-scope */
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { addDoc, collection, Timestamp } from '@firebase/firestore';
 import {
   FormControl,
@@ -5,48 +7,42 @@ import {
   MenuItem,
   Paper,
   Select,
-  TextField
+  TextField,
 } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import {
-  expenseCategories, incomeCategories
+  expenseCategories,
+  incomeCategories,
 } from '../../constants/categories';
 import { db } from '../../firebase';
 import { useStateValue } from '../../StateProvider';
 import './Form.css';
+import { useSpeechContext } from '@speechly/react-client';
 
 function Form() {
   // getting current user
   const [{ user }] = useStateValue();
 
+  const transactionBtnRef = useRef(null);
+
   // whole state
   const [type, setType] = useState('Income');
   const [category, setCategory] = useState('');
-  const [amount, setAmount] = useState("");
+  const [amount, setAmount] = useState('');
   const [date, setDate] = useState(null);
   const categories = type === 'Income' ? incomeCategories : expenseCategories;
 
-  // { amount: 500, category: 'Salary', type: 'Income', date: '2020-11-16', id: '44c68123-5b86-4cc8-b915-bb9e16cebe6a' }
+  // loading state of button
+  const [loading, setLoading] = useState(false);
+
+  const { segment } = useSpeechContext();
+
   const addTransaction = async (e) => {
     e.preventDefault();
 
-    if (category === '') {
-      toast.error('Category cannot be empty.');
-      return;
-    }
-
-    if (!(amount > 0)) {
-      toast.error('Amount cannot be Rs. 0.');
-      return;
-    }
-
-    if (date === null) {
-      toast.error('Please consider adding date.');
-      return;
-    }
-
     const newTransaction = {
+      // eslint-disable-next-line radix
       amount: parseInt(amount),
       category,
       type,
@@ -55,17 +51,77 @@ function Form() {
       _createdAt: Timestamp.now(),
     };
 
-    const docRef = await addDoc(collection(db, `transactions`), newTransaction);
+    setAmount('');
+    setCategory('');
+    setDate(null);
+
+    setLoading(true);
+    const docRef = await addDoc(collection(db, 'transactions'), newTransaction);
+    setLoading(false);
     console.log('Document written with ID: ', docRef.id);
-
-
-    setAmount("")
-    setCategory("")
   };
+
+  const addTransactionFromVoice = async () => {
+    console.log({ type, category, amount, date });
+  };
+
+  // logic for voice input actions
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (segment) {
+      if (segment.intent.intent === 'add_expense') {
+        setType('Expense');
+      } else if (segment.intent.intent === 'add_income') {
+        setType('Income');
+      } else if (
+        segment.isFinal &&
+        segment.intent.intent === 'create_transaction'
+      ) {
+        return addTransactionFromVoice();
+      } else if (
+        segment.isFinal &&
+        segment.intent.intent === 'cancel_transaction'
+      ) {
+        setAmount('');
+        setCategory('');
+        setDate(null);
+        return;
+      }
+
+      segment.entities.forEach((e) => {
+        switch (e.type) {
+          case 'amount':
+            console.log(e.value);
+            setAmount(e.value);
+            break;
+          case 'date':
+            console.log(e.value);
+
+            setDate(e.value);
+            break;
+          default:
+          case 'category':
+            const currCategory = `${e.value[0]}${e.value
+              .substr(1)
+              .toLowerCase()}`;
+            console.log(currCategory);
+
+            setCategory(currCategory);
+            break;
+        }
+      });
+    }
+  }, [addTransactionFromVoice, segment]);
 
   return (
     <Paper className='mainForm__container'>
-      <form className='mainForm'>
+      {segment && (
+        <p title='Transcript' className='speechly_transcript'>
+          <span>Transcipt of the Voice Input 👉👉 : </span>
+          {segment.words.map((w) => w.value).join(' ')}
+        </p>
+      )}
+      <form onSubmit={addTransaction} className='mainForm'>
         <div className='mainForm__input'>
           <FormControl fullWidth>
             <InputLabel id='demo-simple-select-label'>Type</InputLabel>
@@ -77,13 +133,13 @@ function Form() {
               value={type}
               onChange={(e) => setType(e.target.value)}
             >
-              <MenuItem value={'Income'}>Income</MenuItem>
+              <MenuItem value='Income'>Income</MenuItem>
 
-              <MenuItem value={'Expense'}>Expense</MenuItem>
+              <MenuItem value='Expense'>Expense</MenuItem>
             </Select>
           </FormControl>
         </div>
-        <div style={{width:"300px"}} className='mainForm__input'>
+        <div style={{ width: '300px' }} className='mainForm__input'>
           <FormControl fullWidth>
             <InputLabel id='demo-simple-select-label'>Category</InputLabel>
             <Select
@@ -119,14 +175,15 @@ function Form() {
             onChange={(e) => setDate(e.target.value)}
           />
         </div>
-        <button
-          type='submit'
-          className='mainForm__submitBtn'
-          variant='contained'
-          onClick={addTransaction}
-        >
-          Add
-        </button>
+        <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
+          <button
+            type='submit'
+            className={`mainForm__submitBtn ${loading && 'btn-loading'}`}
+            variant='contained'
+          >
+            {loading ? 'Adding' : 'Add'}
+          </button>
+        </div>
       </form>
     </Paper>
   );

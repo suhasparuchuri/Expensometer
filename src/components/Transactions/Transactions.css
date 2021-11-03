@@ -37,3 +37,10 @@
 .transaction__right{
   padding: 10px;
 }
+
+@media screen and (max-width: 685px) {
+  .transactions__list{
+    overflow-y: auto;
+  max-height: none;
+  }
+}

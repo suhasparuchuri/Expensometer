@@ -1,6 +1,7 @@
 .mainForm__container {
   margin: 5px;
-  padding: 30px;
+  padding: 20px;
+  height: fit-content;
 }
 
 .mainForm {
@@ -15,22 +16,35 @@
   margin: 0 20px;
 }
 
-.mainForm__input > input{
+.mainForm__input > input {
   padding: 14px 16px;
 }
 
-
-.mainForm__submitBtn{
-  padding: 18px 40px;
-  background-color: #28A745;
+.mainForm__submitBtn {
+  padding: 14px 40px;
+  background-color: #28a745;
   color: white;
   border: none;
   border-radius: 10px;
   cursor: pointer;
+  font-weight: 400;
+  font-size: medium;
 }
 
+.speechly_transcript {
+  margin-bottom: 15px;
+  padding: 10px;
+  font-size: small;
+  background-color: rgb(205, 205, 205);
+  border-radius: 10px;
+  margin-left: 20px;
+}
+.speechly_transcript > span {
+  font-weight: 600;
+  margin-right: 5px;
+  font-size: large;
+}
 
-.mainForm__submitBtn:hover{
-  background-color: #33c956;
-
+.btn-loading {
+  background-color: gray;
 }
