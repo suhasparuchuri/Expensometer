@@ -83,7 +83,7 @@ function Form() {
             </Select>
           </FormControl>
         </div>
-        <div style={{ flex: 1 }} className='mainForm__input'>
+        <div style={{width:"300px"}} className='mainForm__input'>
           <FormControl fullWidth>
             <InputLabel id='demo-simple-select-label'>Category</InputLabel>
             <Select

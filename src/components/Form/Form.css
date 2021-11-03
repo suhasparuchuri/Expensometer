@@ -1,16 +1,18 @@
 .mainForm__container {
   margin: 5px;
-  padding: 20px;
+  padding: 30px;
 }
 
 .mainForm {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  /* justify-content: space-between; */
+  overflow-x: scroll;
 }
 
 .mainForm__input {
-  margin: 0 10px;
+  min-width: fit-content;
+  margin: 0 20px;
 }
 
 .mainForm__input > input{

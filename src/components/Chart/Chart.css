@@ -1,4 +1,12 @@
 .chartContainer{
   padding: 20px;
-  margin: 5px;
+  margin: 5px 0px;
+  max-width: 300px;
+}
+
+@media screen and (max-width: 1272px){
+  .chartContainer{
+
+    
+  }
 }

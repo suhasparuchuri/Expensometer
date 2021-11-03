@@ -1,6 +1,7 @@
 .transactions {
-  padding: 10px;
+  padding: 10px 0px;
   width: 100%;
+  margin: 5px;
 }
 .transactions__list{
 

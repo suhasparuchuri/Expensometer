@@ -69,8 +69,12 @@ function App() {
                 <Transactions transactions={transactions} />
               </div>
               <div className='data__right'>
-                <Chart title='Income' />
-                <Chart title='Expense' />
+                {transactions.filter((t) => t.type === 'Income').length > 0 && (
+                  <Chart title='Income' />
+                )}
+
+                {transactions.filter((t) => t.type === 'Expense').length >
+                  0 && <Chart title='Expense' />}
               </div>
             </div>
           ) : (
