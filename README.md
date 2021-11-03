@@ -37,6 +37,6 @@
 <section>
 <p>
 
-  <strong>Note : </strong> Kindly please use this app only on Large Screens.
+  <strong>Note : </strong> Kindly please use this app only on a Laptop or PC.
 </p>
 </section>
