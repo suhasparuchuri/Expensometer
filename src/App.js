@@ -49,7 +49,7 @@ function App() {
               id: doc.id,
               ...doc.data(),
             }))
-            .filter((t) => t.username === user.email),
+            .filter((t) => t.username === user?.email),
         });
       }
     );
