@@ -1,7 +1,13 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { onAuthStateChanged } from '@firebase/auth';
-import { collection, onSnapshot, orderBy, query } from '@firebase/firestore';
-import React, { useEffect } from 'react';
+import {
+  collection,
+  doc,
+  onSnapshot,
+  orderBy,
+  query,
+} from '@firebase/firestore';
+import React, { useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
@@ -17,10 +23,17 @@ import {
   PushToTalkButton,
   PushToTalkButtonContainer,
 } from '@speechly/react-ui';
+import { Modal, Tooltip } from '@mui/material';
+import { getBalance } from './utils/getBalance';
+import NumberFormat from 'react-number-format';
+import AccountDetailsSvg from './assets/undraw_profile_re_4a55.svg';
 
 function App() {
-  const [{ user, transactions, windowWidth }, dispatch] = useStateValue();
+  const [{ user, transactions, windowWidth, openModal }, dispatch] =
+    useStateValue();
+  const [username, setUsername] = useState('');
 
+  const balance = getBalance(transactions);
   // query for the transactions of current user.
 
   useEffect(() => {
@@ -57,21 +70,82 @@ function App() {
     return unsubscribe;
   }, [dispatch, user]);
 
+  useEffect(() => {
+    if (user) {
+      onSnapshot(doc(db, 'users', user.uid), (doc) => {
+        setUsername(doc.data().username);
+      });
+    }
+  }, [user]);
+
   console.log({ user, transactions, windowWidth });
+
+  const handleModalClose = () => {
+    dispatch({ type: 'SET_MODAL_STATE', payload: false });
+  };
 
   return (
     <div className='app'>
-      {user && (
-        <div className='mic__container'>
-          <PushToTalkButtonContainer>
-            <PushToTalkButton placement='top' size='50px' />
-          </PushToTalkButtonContainer>
-        </div>
-      )}
-
       <ToastContainer />
       {user ? (
         <div className='app__mainContent'>
+          <Modal
+            open={openModal}
+            onClose={handleModalClose}
+            aria-labelledby='modal-modal-title'
+            aria-describedby='modal-modal-description'
+          >
+            <div className='modal__container'>
+              <span
+                className="modal__close"
+                onClick={() => {
+                  dispatch({ type: 'SET_MODAL_STATE', payload: false });
+                }}
+              >
+                &times;
+              </span>
+
+              <img
+                style={{ width: '100%', objectFit: 'contain' }}
+                src={AccountDetailsSvg}
+                alt=''
+              />
+              <div className='modal__details'>
+                <div className='modal_detail'>
+                  <p className='detail-header'>Email</p>
+                  <p>{user.email}</p>
+                </div>
+                <div className='modal_detail'>
+                  <p className='detail-header'>Username</p>
+                  <p>{username}</p>
+                </div>
+                <div className='modal_detail'>
+                  <p className='detail-header'>User since</p>
+                  <p>{user.metadata.creationTime.split(" ").slice(0,4).join(" ")}</p>
+                </div>
+                <div className='modal_detail'>
+                  <p className='detail-header'>Balance</p>
+                  <p>
+                    <NumberFormat
+                      value={balance}
+                      className='foo'
+                      displayType={'text'}
+                      thousandSeparator={true}
+                      prefix={'Rs.'}
+                      renderText={(value, props) => (
+                        <div {...props}>{value}</div>
+                      )}
+                    />
+                  </p>
+                </div>
+              </div>
+            </div>
+          </Modal>
+          <div className='mic__container'>
+            <PushToTalkButtonContainer>
+              <PushToTalkButton placement='top' size='50px' />
+            </PushToTalkButtonContainer>
+          </div>
           <Header />
           <Form />
           {transactions?.length >= 1 ? (

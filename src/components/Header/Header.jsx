@@ -1,15 +1,14 @@
 import { signOut } from '@firebase/auth';
-import { Button, Paper } from '@mui/material';
-import NumberFormat from 'react-number-format';
+import PersonIcon from '@mui/icons-material/Person';
+import { Button, IconButton, Paper, Tooltip } from '@mui/material';
 import { auth } from '../../firebase';
 import { useStateValue } from '../../StateProvider';
-import { getBalance } from '../../utils/getBalance';
 import './Header.css';
 
 function Header() {
-  const [{ user, transactions }] = useStateValue();
 
-  const balance = getBalance(transactions);
+  const [state,dispatch] = useStateValue()
+  
 
   const logoutUser = () => {
     signOut(auth);
@@ -23,21 +22,18 @@ function Header() {
           Powered by <u>Speechly</u>
         </p>
       </div>
-      <div className='header__balance'>
+      {/* <div className='header__balance'>
         <p>
           Balance :
-          <NumberFormat
-            value={balance}
-            className='foo'
-            displayType={'text'}
-            thousandSeparator={true}
-            prefix={'Rs.'}
-            renderText={(value, props) => <div {...props}>{value}</div>}
-          />
+          
         </p>
-      </div>
+      </div> */}
       <div className='header__userGreet'>
-        Hello, {user.email} ✋✋
+        <Tooltip title="USER DETAILS">
+          <IconButton onClick={()=>{dispatch({type:"SET_MODAL_STATE", payload:true})}}>
+            <PersonIcon />
+          </IconButton>
+        </Tooltip>
       </div>
       <div className='header__logoutbtn'>
         <Button onClick={logoutUser}>Logout</Button>

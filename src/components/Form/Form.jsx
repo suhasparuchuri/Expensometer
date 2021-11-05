@@ -62,9 +62,7 @@ function Form() {
     console.log('Document written with ID: ', docRef.id);
   };
 
-  const addTransactionFromVoice = async () => {
-    console.log({ type, category, amount, date });
-  };
+  
 
   // logic for voice input actions
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -78,7 +76,7 @@ function Form() {
         segment.isFinal &&
         segment.intent.intent === 'create_transaction'
       ) {
-        return addTransactionFromVoice();
+        return;
       } else if (
         segment.isFinal &&
         segment.intent.intent === 'cancel_transaction'
@@ -112,7 +110,7 @@ function Form() {
         }
       });
     }
-  }, [addTransactionFromVoice, segment]);
+  }, [segment]);
 
   return (
     <Paper className='mainForm__container'>

@@ -2,6 +2,7 @@ export const initialState = {
   user: null,
   transactions: null,
   windowWidth: window.innerWidth,
+  openModal:false
 };
 
 const reducer = (state, action) => {
@@ -24,6 +25,13 @@ const reducer = (state, action) => {
       ...state,
       windowWidth: action.payload,
     };
+  }
+
+  if (action.type === "SET_MODAL_STATE") {
+    return {
+      ...state,
+      openModal:action.payload
+    }
   }
 };
 

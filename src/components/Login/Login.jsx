@@ -4,9 +4,16 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from '@firebase/auth';
-import { auth } from '../../firebase';
+import { auth, db } from '../../firebase';
 import { toast } from 'react-toastify';
 import './Login.css';
+import {
+  addDoc,
+  collection,
+  doc,
+  serverTimestamp,
+  setDoc,
+} from '@firebase/firestore';
 
 function Login() {
   // local state
@@ -36,7 +43,7 @@ function Login() {
   };
 
   const createUser = async () => {
-    if (email === '' || password === '') {
+    if (email.trim() === '' || password.trim() === '') {
       toast.error('Email/Password cannot be empty', {
         position: 'top-right',
         autoClose: 5000,
@@ -48,9 +55,29 @@ function Login() {
       });
       return;
     }
+
+    const username = prompt('Provide us a username.');
+
+    if (username === '' || !username) {
+      toast.error('Username cannot be empty', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      return;
+    }
+
     await createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        console.log(userCredential);
+        setDoc(doc(db, 'users', userCredential.user.uid), {
+          showAudioModal: true,
+          _createdAt: serverTimestamp(),
+          username: username,
+        });
       })
       .catch((err) => alert(err.message));
   };
