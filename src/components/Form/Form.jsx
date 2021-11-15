@@ -31,7 +31,7 @@ function Form() {
   const [type, setType] = useState('Income');
   const [category, setCategory] = useState('');
   const [amount, setAmount] = useState('');
-  const [date, setDate] = useState(null);
+  const [date, setDate] = useState("");
   const categories = type === 'Income' ? incomeCategories : expenseCategories;
 
   // loading state of button
@@ -41,6 +41,7 @@ function Form() {
 
   const addTransaction = async (e) => {
     e.preventDefault();
+    console.log(typeof date);
 
     const newTransaction = {
       // eslint-disable-next-line radix
@@ -54,15 +55,13 @@ function Form() {
 
     setAmount('');
     setCategory('');
-    setDate(null);
+    setDate("");
 
     setLoading(true);
     const docRef = await addDoc(collection(db, 'transactions'), newTransaction);
     setLoading(false);
     console.log('Document written with ID: ', docRef.id);
   };
-
-  
 
   // logic for voice input actions
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -114,10 +113,15 @@ function Form() {
 
   return (
     <Paper className='mainForm__container'>
-      {segment && (
+      {segment ? (
         <p title='Transcript' className='speechly_transcript'>
           <span>Transcipt of the Voice Input 👉👉 : </span>
           {segment.words.map((w) => w.value).join(' ')}
+        </p>
+      ) : (
+        <p title='Transcript' className='speechly_transcript'>
+          <span>Try Saying 👉👉 : </span>
+          Add income in category business of 500 ruppes for next tuesday.
         </p>
       )}
       <form onSubmit={addTransaction} className='mainForm'>

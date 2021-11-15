@@ -152,3 +152,11 @@
   letter-spacing: -0.05em;
 
 }
+
+
+.circular-loading{
+  display: flex;
+  align-items:center;
+  justify-content: center;
+  height: 100vh;
+}

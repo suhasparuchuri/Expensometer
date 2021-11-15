@@ -27,11 +27,13 @@ import { Modal, Tooltip } from '@mui/material';
 import { getBalance } from './utils/getBalance';
 import NumberFormat from 'react-number-format';
 import AccountDetailsSvg from './assets/undraw_profile_re_4a55.svg';
+import CircularLoading from './components/CircularLoading';
 
 function App() {
   const [{ user, transactions, windowWidth, openModal }, dispatch] =
     useStateValue();
   const [username, setUsername] = useState('');
+  const [loading, setLoading] = useState(true);
 
   const balance = getBalance(transactions);
   // query for the transactions of current user.
@@ -40,6 +42,7 @@ function App() {
     onAuthStateChanged(auth, (currUser) => {
       dispatch({ type: 'SET_USER', payload: currUser });
     });
+    setLoading(false);
   }, [dispatch]);
 
   useEffect(() => {
@@ -84,6 +87,10 @@ function App() {
     dispatch({ type: 'SET_MODAL_STATE', payload: false });
   };
 
+  if (loading) {
+    return <CircularLoading />;
+  }
+
   return (
     <div className='app'>
       <ToastContainer />
@@ -97,7 +104,7 @@ function App() {
           >
             <div className='modal__container'>
               <span
-                className="modal__close"
+                className='modal__close'
                 onClick={() => {
                   dispatch({ type: 'SET_MODAL_STATE', payload: false });
                 }}
@@ -121,7 +128,12 @@ function App() {
                 </div>
                 <div className='modal_detail'>
                   <p className='detail-header'>User since</p>
-                  <p>{user.metadata.creationTime.split(" ").slice(0,4).join(" ")}</p>
+                  <p>
+                    {user.metadata.creationTime
+                      .split(' ')
+                      .slice(0, 4)
+                      .join(' ')}
+                  </p>
                 </div>
                 <div className='modal_detail'>
                   <p className='detail-header'>Balance</p>

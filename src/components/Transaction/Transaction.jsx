@@ -3,9 +3,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { IconButton, Paper, Tooltip } from '@mui/material';
 import NumberFormat from 'react-number-format';
 import { db } from '../../firebase';
+import { getIconSrc } from '../../utils/getIconSrc';
 
 function Transaction({ id, amount, category, type, date, _createdAt }) {
   const amountColor = type === 'Income' ? 'green' : 'red';
+  const iconSrc = getIconSrc(category, type);
 
   const deleteTransaction = async () => {
     await deleteDoc(doc(db, 'transactions', id));
@@ -14,6 +16,9 @@ function Transaction({ id, amount, category, type, date, _createdAt }) {
 
   return (
     <Paper className='transaction'>
+      <div className='transaction__icon' style={{backgroundColor:`${type === "Income" && "#8ced76"}`}}>
+        <img src={iconSrc} alt='' />
+      </div>
       <div className='transaction__left'>
         <p>{category}</p>
         <span>{date}</span>
@@ -30,7 +35,7 @@ function Transaction({ id, amount, category, type, date, _createdAt }) {
         />
       </div>
       <div className='transaction__right'>
-        <Tooltip title="Delete">
+        <Tooltip title='Delete'>
           <IconButton onClick={deleteTransaction}>
             <DeleteIcon color='primary' />
           </IconButton>

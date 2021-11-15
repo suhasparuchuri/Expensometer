@@ -44,3 +44,10 @@
   max-height: none;
   }
 }
+
+
+.transaction__icon{
+  background-color: rgb(215, 118, 118);
+  margin: 20px;
+  padding: 5px;
+}
